@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import GiftCard from "./GiftCard";
 
+const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
 export default function GiftList() {
   const [presentes, setPresentes] = useState(null);
   const [erro, setErro] = useState(null);
   const [selecionado, setSelecionado] = useState(null);
   const [nomeComprador, setNomeComprador] = useState("");
+  const [valorContribuicao, setValorContribuicao] = useState("");
   const [redirecionando, setRedirecionando] = useState(false);
   const [erroModal, setErroModal] = useState(null);
 
@@ -27,8 +30,10 @@ export default function GiftList() {
   }
 
   function abrirModal(presente) {
+    const falta = Number(presente.valor) - Number(presente.arrecadado || 0);
     setSelecionado(presente);
     setNomeComprador("");
+    setValorContribuicao(falta > 0 ? falta.toFixed(2) : "0");
     setErroModal(null);
   }
 
@@ -43,6 +48,17 @@ export default function GiftList() {
       return;
     }
 
+    const falta = Number(selecionado.valor) - Number(selecionado.arrecadado || 0);
+    const valor = Number(valorContribuicao.replace(",", "."));
+    if (!Number.isFinite(valor) || valor <= 0) {
+      setErroModal("Informa um valor de contribuição válido.");
+      return;
+    }
+    if (valor > falta + 0.01) {
+      setErroModal(`O valor não pode passar de ${formatador.format(falta)}, que é o que falta pra completar.`);
+      return;
+    }
+
     setRedirecionando(true);
     setErroModal(null);
 
@@ -50,7 +66,7 @@ export default function GiftList() {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ giftId: selecionado.id, compradorNome: nomeComprador }),
+        body: JSON.stringify({ giftId: selecionado.id, compradorNome: nomeComprador, valor }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.erro || "Erro ao iniciar pagamento");
@@ -76,10 +92,11 @@ export default function GiftList() {
       {selecionado && (
         <div className="modal-fundo" onClick={fecharModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <span className="ficha__rotulo">Presentear</span>
+            <span className="ficha__rotulo">Contribuir</span>
             <h3 style={{ marginTop: 8 }}>{selecionado.nome}</h3>
             <p style={{ fontSize: 14, color: "rgba(35,40,31,0.65)", marginTop: 6 }}>
-              Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
+              Falta {formatador.format(Math.max(0, Number(selecionado.valor) - Number(selecionado.arrecadado || 0)))}{" "}
+              pra completar esse presente. Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
             </p>
 
             <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
@@ -92,6 +109,19 @@ export default function GiftList() {
                   onChange={(e) => setNomeComprador(e.target.value)}
                   placeholder="Pra sabermos quem presenteou"
                   maxLength={120}
+                />
+              </div>
+
+              <div className="campo">
+                <label htmlFor="valorContribuicao">Quanto você quer contribuir?</label>
+                <input
+                  id="valorContribuicao"
+                  type="number"
+                  step="0.01"
+                  min="1"
+                  max={Math.max(0, Number(selecionado.valor) - Number(selecionado.arrecadado || 0))}
+                  value={valorContribuicao}
+                  onChange={(e) => setValorContribuicao(e.target.value)}
                 />
               </div>
 

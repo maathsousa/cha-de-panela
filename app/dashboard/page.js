@@ -41,8 +41,16 @@ export default function Dashboard() {
   const naoVao = dados.rsvps.filter((r) => !r.confirmado);
   const totalPessoas = confirmados.reduce((soma, r) => soma + 1 + (r.acompanhantes || 0), 0);
 
-  const presentesPagos = dados.gifts.filter((g) => g.status === "pago");
-  const arrecadado = presentesPagos.reduce((soma, g) => soma + Number(g.valor), 0);
+  const arrecadado = dados.contributions
+    .filter((c) => c.status === "pago")
+    .reduce((soma, c) => soma + Number(c.valor), 0);
+
+  const contribuicoesPorGift = {};
+  for (const c of dados.contributions) {
+    (contribuicoesPorGift[c.gift_id] ||= []).push(c);
+  }
+
+  const rotuloStatusContribuicao = { pago: "✅ Paga", pendente: "⏳ Pendente", cancelado: "❌ Cancelada" };
 
   return (
     <div className="dash">
@@ -115,20 +123,33 @@ export default function Dashboard() {
                 <th>Presente</th>
                 <th>Valor</th>
                 <th>Status</th>
-                <th>Presenteado por</th>
+                <th>Contribuições</th>
               </tr>
             </thead>
             <tbody>
-              {dados.gifts.map((g) => (
-                <tr key={g.id}>
-                  <td>{g.nome}</td>
-                  <td>{formatador.format(g.valor)}</td>
-                  <td>
-                    {g.status === "pago" ? "✅ Pago" : g.status === "pendente" ? "⏳ Pendente" : "◻️ Disponível"}
-                  </td>
-                  <td>{g.comprador_nome || "—"}</td>
-                </tr>
-              ))}
+              {dados.gifts.map((g) => {
+                const contribuicoes = contribuicoesPorGift[g.id] || [];
+                return (
+                  <tr key={g.id}>
+                    <td>{g.nome}</td>
+                    <td>{formatador.format(g.valor)}</td>
+                    <td>{g.status === "pago" ? "✅ Completo" : "◻️ Disponível"}</td>
+                    <td>
+                      {contribuicoes.length === 0 ? (
+                        "—"
+                      ) : (
+                        <ul style={{ margin: 0, paddingLeft: 18, listStyle: "none" }}>
+                          {contribuicoes.map((c) => (
+                            <li key={c.id} style={{ fontSize: 13 }}>
+                              {c.nome} — {formatador.format(c.valor)} ({rotuloStatusContribuicao[c.status]})
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

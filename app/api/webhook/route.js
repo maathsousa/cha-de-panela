@@ -22,27 +22,45 @@ export async function POST(request) {
 
   try {
     const pagamento = await buscarPagamento(paymentId);
-    const giftId = pagamento.external_reference;
+    const contributionId = pagamento.external_reference;
 
-    if (!giftId) {
+    if (!contributionId) {
+      return NextResponse.json({ ok: true });
+    }
+
+    const { data: contribution } = await supabaseAdmin
+      .from("contributions")
+      .select("id, gift_id")
+      .eq("id", contributionId)
+      .single();
+
+    if (!contribution) {
       return NextResponse.json({ ok: true });
     }
 
     if (pagamento.status === "approved") {
       await supabaseAdmin
-        .from("gifts")
-        .update({
-          status: "pago",
-          mp_payment_id: String(paymentId),
-          comprador_nome: pagamento.metadata?.comprador_nome || "Convidado",
-        })
-        .eq("id", giftId);
-    } else if (["rejected", "cancelled"].includes(pagamento.status)) {
-      // Libera o presente de novo pra outra pessoa poder presentear
+        .from("contributions")
+        .update({ status: "pago", mp_payment_id: String(paymentId) })
+        .eq("id", contributionId)
+        .eq("status", "pendente");
+
+      const [{ data: gift }, { data: pagas }] = await Promise.all([
+        supabaseAdmin.from("gifts").select("valor").eq("id", contribution.gift_id).single(),
+        supabaseAdmin.from("contributions").select("valor").eq("gift_id", contribution.gift_id).eq("status", "pago"),
+      ]);
+
+      const arrecadado = (pagas || []).reduce((soma, c) => soma + Number(c.valor), 0);
+
+      if (gift && arrecadado >= Number(gift.valor)) {
+        await supabaseAdmin.from("gifts").update({ status: "pago" }).eq("id", contribution.gift_id);
+      }
+    } else if (["rejected", "cancelled", "expired"].includes(pagamento.status)) {
+      // Libera essa contribuição, sem afetar outras contribuições pendentes do mesmo presente
       await supabaseAdmin
-        .from("gifts")
-        .update({ status: "disponivel", mp_preference_id: null })
-        .eq("id", giftId)
+        .from("contributions")
+        .update({ status: "cancelado" })
+        .eq("id", contributionId)
         .eq("status", "pendente");
     }
     // status "pending" (ex: boleto/pix aguardando) a gente só espera a próxima notificação

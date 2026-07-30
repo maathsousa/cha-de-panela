@@ -3,7 +3,7 @@ import { supabaseAdmin } from "../../../lib/supabase";
 import { criarPreferencia } from "../../../lib/mercadopago";
 
 export async function POST(request) {
-  const { giftId, compradorNome } = await request.json();
+  const { giftId, compradorNome, valor } = await request.json();
 
   if (!giftId) {
     return NextResponse.json({ erro: "Presente não informado." }, { status: 400 });
@@ -20,22 +20,56 @@ export async function POST(request) {
   }
 
   if (gift.status === "pago") {
-    return NextResponse.json({ erro: "Esse presente já foi dado por alguém." }, { status: 409 });
+    return NextResponse.json({ erro: "Esse presente já foi totalmente arrecadado." }, { status: 409 });
+  }
+
+  const { data: pagas } = await supabaseAdmin
+    .from("contributions")
+    .select("valor")
+    .eq("gift_id", giftId)
+    .eq("status", "pago");
+
+  const arrecadado = (pagas || []).reduce((soma, c) => soma + Number(c.valor), 0);
+  const falta = Number(gift.valor) - arrecadado;
+
+  const valorContribuicao = Number(valor);
+  if (!Number.isFinite(valorContribuicao) || valorContribuicao <= 0) {
+    return NextResponse.json({ erro: "Informe um valor de contribuição válido." }, { status: 400 });
+  }
+  if (valorContribuicao > falta + 0.01) {
+    return NextResponse.json(
+      { erro: "Esse valor é maior do que ainda falta arrecadar pra esse presente." },
+      { status: 400 }
+    );
   }
 
   try {
-    const preferencia = await criarPreferencia({ gift, compradorNome });
-
-    // Marca como "pendente" e guarda o id da preferência + o nome de quem está presenteando,
-    // pra já aparecer reservado na lista enquanto o pagamento é confirmado.
-    await supabaseAdmin
-      .from("gifts")
-      .update({
+    const { data: contribution, error: erroContribution } = await supabaseAdmin
+      .from("contributions")
+      .insert({
+        gift_id: giftId,
+        nome: compradorNome || "Convidado",
+        valor: valorContribuicao,
         status: "pendente",
-        mp_preference_id: preferencia.id,
-        comprador_nome: compradorNome || "Convidado",
       })
-      .eq("id", giftId);
+      .select()
+      .single();
+
+    if (erroContribution || !contribution) {
+      throw erroContribution || new Error("Falha ao criar contribuição.");
+    }
+
+    const preferencia = await criarPreferencia({
+      gift,
+      valor: valorContribuicao,
+      compradorNome,
+      contributionId: contribution.id,
+    });
+
+    await supabaseAdmin
+      .from("contributions")
+      .update({ mp_preference_id: preferencia.id })
+      .eq("id", contribution.id);
 
     return NextResponse.json({ initPoint: preferencia.init_point });
   } catch (err) {

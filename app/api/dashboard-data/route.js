@@ -8,15 +8,16 @@ export async function GET(request) {
     return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
   }
 
-  const [rsvps, gifts] = await Promise.all([
+  const [rsvps, gifts, contributions] = await Promise.all([
     supabaseAdmin.from("rsvps").select("*").order("created_at", { ascending: false }),
     supabaseAdmin.from("gifts").select("*").order("valor", { ascending: true }),
+    supabaseAdmin.from("contributions").select("*").order("created_at", { ascending: false }),
   ]);
 
-  if (rsvps.error || gifts.error) {
-    console.error(rsvps.error || gifts.error);
+  if (rsvps.error || gifts.error || contributions.error) {
+    console.error(rsvps.error || gifts.error || contributions.error);
     return NextResponse.json({ erro: "Erro ao carregar dados." }, { status: 500 });
   }
 
-  return NextResponse.json({ rsvps: rsvps.data, gifts: gifts.data });
+  return NextResponse.json({ rsvps: rsvps.data, gifts: gifts.data, contributions: contributions.data });
 }
