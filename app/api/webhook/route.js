@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { supabaseAdmin } from "../../../lib/supabase";
 import { buscarPagamento } from "../../../lib/mercadopago";
 
+export const maxDuration = 30;
+
 // O Mercado Pago chama essa rota automaticamente quando o status de um
 // pagamento muda. Documentação: https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/additional-content/notifications/webhooks
 export async function POST(request) {
+  console.log("Webhook recebido:", new Date().toISOString());
+
   let payload;
   try {
     payload = await request.json();
@@ -22,6 +26,7 @@ export async function POST(request) {
 
   try {
     const pagamento = await buscarPagamento(paymentId);
+    console.log("Status do pagamento:", pagamento.status);
     const contributionId = pagamento.external_reference;
 
     if (!contributionId) {
