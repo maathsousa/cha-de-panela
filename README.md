@@ -1,128 +1,89 @@
-# Chá de Panela — Matheus & [Nome dela]
+# Chá de Panela — Convite & Lista de Presentes Online
 
-Site com confirmação de presença (RSVP), lista de presentes com pagamento via
-Mercado Pago (Pix + cartão) e um dashboard privado pra acompanhar tudo.
+Aplicação web full-stack para eventos de chá de panela/casa nova: os convidados confirmam presença e escolhem presentes de uma lista, pagando via Pix ou cartão através do Mercado Pago. O anfitrião acompanha tudo em um dashboard privado, em tempo real.
 
-## Stack
+Projeto pessoal desenvolvido para aprofundar integração de pagamentos, autenticação simples sem dependências pesadas, e Row Level Security no Postgres.
 
-- **Next.js 14** (App Router) — frontend + rotas de API
-- **Supabase** (Postgres grátis) — banco de dados
-- **Mercado Pago** (Checkout Pro) — recebimento via Pix/cartão
-- **Vercel** — hospedagem gratuita
+## Funcionalidades
 
----
+- **Landing page responsiva** com identidade visual própria (paleta e tipografia customizadas via CSS, sem UI kit genérico)
+- **RSVP** — formulário de confirmação de presença, com acompanhantes e recado opcional
+- **Lista de presentes dinâmica** — busca em tempo real do banco, com estado (`disponível` / `pendente` / `pago`)
+- **Checkout integrado** — geração de cobrança via Mercado Pago (Checkout Pro), suportando Pix e cartão
+- **Webhook de pagamento** — confirmação assíncrona do status do pagamento, atualizando o presente automaticamente sem intervenção manual
+- **Dashboard administrativo** — protegido por autenticação própria (cookie assinado via HMAC), exibe métricas de confirmações e arrecadação
 
-## 1. Rodando localmente
+## Stack técnica
+
+| Camada | Tecnologia |
+|---|---|
+| Framework | [Next.js 14](https://nextjs.org/) (App Router, Route Handlers) |
+| Banco de dados | [Supabase](https://supabase.com/) (Postgres + Row Level Security) |
+| Pagamentos | [Mercado Pago](https://www.mercadopago.com.br/developers) (Checkout Pro API) |
+| Autenticação do painel | Cookie de sessão assinado via HMAC-SHA256 (Web Crypto API — compatível com Edge Runtime), sem dependência externa |
+| Hospedagem | [Vercel](https://vercel.com/) |
+
+## Arquitetura
+
+```
+Convidado                          Servidor (Next.js / Vercel)              Serviços externos
+─────────                          ────────────────────────────             ─────────────────
+Landing page  ── RSVP ──────────►  /api/rsvp ──────────────────────────►    Supabase (insert)
+              ── vê presentes ──►  /api/gifts ─────────────────────────►    Supabase (select, RLS)
+              ── "Presentear" ──►  /api/checkout ───────────────────────►   Mercado Pago (cria preferência)
+                                   marca gift como "pendente"
+
+Mercado Pago  ── webhook ───────►  /api/webhook ────────────────────────►   Supabase (update: pago/liberado)
+                                   busca pagamento, valida status
+
+Anfitrião     ── login ─────────►  /api/auth/login (valida senha, cookie)
+              ── /dashboard ────►  /api/dashboard-data (protegido por middleware) ──► Supabase (service_role)
+```
+
+**Decisões de design relevantes:**
+
+- **RLS no Postgres** garante que o cliente só consegue inserir RSVPs e ler presentes — nunca ler outros convidados nem alterar status de pagamento. Rotas sensíveis (`checkout`, `webhook`, `dashboard-data`) usam a `service_role key`, isolada em código server-side.
+- **Autenticação sem NextAuth/biblioteca externa**: sessão é um token `timestamp.assinatura` verificado via HMAC, compatível tanto com rotas Node quanto com o Edge Runtime do middleware — evita dependência extra para um caso de uso simples (senha única de admin).
+- **Reconciliação de pagamento via webhook**, não via redirect do usuário: o status "pago" só é confirmado no servidor, consultando a API do Mercado Pago diretamente — o browser nunca é fonte de verdade sobre um pagamento aprovado.
+
+## Rodando localmente
 
 ```bash
 npm install
 cp .env.example .env.local
-```
-
-Preencha o `.env.local` com as chaves que você vai pegar nos passos abaixo.
-
-```bash
+# preencha o .env.local com suas credenciais (Supabase + Mercado Pago)
 npm run dev
 ```
 
-Abra `http://localhost:3000`.
+Veja `.env.example` para a lista completa de variáveis necessárias (Supabase URL/keys, Mercado Pago Access Token, e segredos de sessão do dashboard).
 
----
+### Banco de dados
 
-## 2. Configurando o Supabase (banco de dados)
+O schema (tabelas `rsvps` e `gifts`, com as policies de RLS) está em [`supabase/schema.sql`](./supabase/schema.sql) — basta rodar no SQL Editor de um projeto Supabase novo.
 
-1. Crie uma conta grátis em [supabase.com](https://supabase.com) e um novo projeto.
-2. Vá em **SQL Editor**, cole o conteúdo do arquivo `supabase/schema.sql` e rode.
-   Isso cria as tabelas `rsvps` e `gifts`, já populando a lista de presentes
-   com alguns exemplos (edite os valores/nomes direto no SQL antes de rodar,
-   ou depois pela aba **Table Editor**).
-3. Em **Project Settings → API**, copie:
-   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
-   - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (⚠️ nunca exponha essa
-     chave no frontend — ela só é usada nas rotas de servidor)
+### Deploy
 
----
+Projeto pronto para deploy direto na Vercel (zero configuração além das variáveis de ambiente). O webhook do Mercado Pago é configurado automaticamente a cada cobrança criada, apontando para `NEXT_PUBLIC_SITE_URL/api/webhook`.
 
-## 3. Configurando o Mercado Pago
+## Estrutura
 
-1. Entre em [mercadopago.com.br/developers/panel](https://www.mercadopago.com.br/developers/panel)
-   com a sua conta (a mesma onde você quer **receber** o dinheiro).
-2. Crie uma aplicação e pegue as **credenciais de produção**:
-   - `Access Token` → `MP_ACCESS_TOKEN`
-3. Em produção, o Mercado Pago vai chamar automaticamente
-   `https://SEU-SITE.vercel.app/api/webhook` toda vez que um pagamento mudar de
-   status — não precisa configurar nada manualmente pra isso, o código já
-   manda esse endereço (`notification_url`) em cada cobrança criada.
-4. **Testando localmente**: o Mercado Pago não consegue chamar `localhost`.
-   Se quiser testar o webhook rodando na sua máquina, use algo como
-   [ngrok](https://ngrok.com) pra gerar uma URL pública temporária e coloque
-   ela em `NEXT_PUBLIC_SITE_URL` durante o teste.
-
----
-
-## 4. Editando o conteúdo do site
-
-- **Textos do convite** (nomes, data, local, horário): edite diretamente em
-  `app/page.js` — procure pelos textos entre colchetes `[assim]`.
-- **Lista de presentes**: edite direto na tabela `gifts` do Supabase (aba
-  **Table Editor**) — nome, descrição, valor e (opcional) `imagem_url` com o
-  link de uma foto do produto.
-- **Cores/fontes**: estão centralizadas em `app/globals.css`, no bloco
-  `:root` no topo do arquivo.
-- **Senha do dashboard**: variável `DASHBOARD_PASSWORD` no `.env`.
-
----
-
-## 5. Publicando no GitHub + Vercel
-
-```bash
-git init
-git add .
-git commit -m "chá de panela"
+```
+app/
+  page.js              → landing page
+  dashboard/           → painel admin (protegido por middleware)
+  api/
+    rsvp/               → confirmação de presença
+    gifts/               → listagem pública de presentes
+    checkout/            → criação de cobrança Mercado Pago
+    webhook/              → confirmação assíncrona de pagamento
+    auth/                 → login/logout do dashboard
+    dashboard-data/        → dados agregados do painel
+components/            → RsvpForm, GiftList, GiftCard (client components)
+lib/                    → clientes Supabase, integração Mercado Pago, auth por HMAC
+middleware.js           → proteção das rotas /dashboard
+supabase/schema.sql      → schema + RLS policies
 ```
 
-1. Crie um repositório novo no GitHub e suba o código:
-   ```bash
-   git remote add origin https://github.com/SEU_USUARIO/cha-de-panela.git
-   git push -u origin main
-   ```
-2. Entre em [vercel.com](https://vercel.com), clique em **Add New → Project**
-   e importe esse repositório.
-3. Em **Environment Variables**, adicione todas as variáveis do `.env.example`
-   com os valores reais (Supabase + Mercado Pago + senha do dashboard).
-   - `NEXT_PUBLIC_SITE_URL` deve ser a URL final da Vercel, ex:
-     `https://cha-de-panela.vercel.app`
-4. Clique em **Deploy**. Pronto — seu site está no ar.
-
-Depois do primeiro deploy, se você mudar `NEXT_PUBLIC_SITE_URL`, precisa
-fazer um novo deploy pra variável entrar em vigor.
-
 ---
 
-## 6. Acessando o dashboard
-
-Vá em `https://SEU-SITE.vercel.app/dashboard` e entre com a senha definida em
-`DASHBOARD_PASSWORD`. Lá você vê:
-
-- Quantas pessoas confirmaram presença (e quantas não vão)
-- Os recados deixados por cada convidado
-- O status de cada presente (disponível / pendente / pago) e quanto já foi
-  arrecadado
-
----
-
-## Observações importantes
-
-- **Presente "pendente"**: quando alguém clica em "Presentear", o item fica
-  marcado como pendente até o pagamento ser confirmado pelo webhook. Se a
-  pessoa desistir no meio do caminho, o Mercado Pago avisa e o presente volta
-  a ficar disponível automaticamente. Enquanto isso, o card mostra
-  "Reservado — presentear mesmo assim", então ninguém fica travado esperando.
-- **Segurança**: a `service_role key` do Supabase e o `Access Token` do
-  Mercado Pago só são usados em rotas de servidor (`app/api/*`), nunca no
-  código que roda no navegador do convidado.
-- **Ideias de próximos passos** (não implementado, mas dá pra evoluir): enviar
-  um e-mail/WhatsApp automático de agradecimento após o pagamento, permitir
-  "cotas" parciais em presentes mais caros, exportar a lista de confirmados
-  em CSV pelo dashboard.
+Projeto pessoal, não afiliado ao Mercado Pago ou Supabase.
