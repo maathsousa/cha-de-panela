@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabasePublic } from "../../../lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const [gifts, contributions] = await Promise.all([
     supabasePublic
