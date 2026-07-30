@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "../../../lib/supabase";
 import { buscarPagamento } from "../../../lib/mercadopago";
+import { marcarContribuicaoPaga } from "../../../lib/gifts";
 
 export const maxDuration = 30;
 
@@ -51,22 +52,11 @@ export async function POST(request) {
     }
 
     if (pagamento.status === "approved") {
-      await supabaseAdmin
-        .from("contributions")
-        .update({ status: "pago", mp_payment_id: String(paymentId) })
-        .eq("id", contributionId)
-        .eq("status", "pendente");
-
-      const [{ data: gift }, { data: pagas }] = await Promise.all([
-        supabaseAdmin.from("gifts").select("valor").eq("id", contribution.gift_id).single(),
-        supabaseAdmin.from("contributions").select("valor").eq("gift_id", contribution.gift_id).eq("status", "pago"),
-      ]);
-
-      const arrecadado = (pagas || []).reduce((soma, c) => soma + Number(c.valor), 0);
-
-      if (gift && arrecadado >= Number(gift.valor)) {
-        await supabaseAdmin.from("gifts").update({ status: "pago" }).eq("id", contribution.gift_id);
-      }
+      await marcarContribuicaoPaga(supabaseAdmin, {
+        contributionId,
+        giftId: contribution.gift_id,
+        paymentId,
+      });
     } else if (["rejected", "cancelled", "expired"].includes(pagamento.status)) {
       // Libera essa contribuição, sem afetar outras contribuições pendentes do mesmo presente
       await supabaseAdmin

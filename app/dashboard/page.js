@@ -8,6 +8,8 @@ const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency:
 export default function Dashboard() {
   const [dados, setDados] = useState(null);
   const [erro, setErro] = useState(null);
+  const [sincronizando, setSincronizando] = useState(false);
+  const [mensagemSync, setMensagemSync] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +36,37 @@ export default function Dashboard() {
     router.push("/dashboard/login");
   }
 
+  async function sincronizarPagamentos() {
+    setSincronizando(true);
+    setMensagemSync(null);
+    try {
+      const res = await fetch("/api/sync-pagamentos", { method: "POST" });
+      if (res.status === 401) {
+        router.push("/dashboard/login");
+        return;
+      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.erro);
+
+      const partes = [];
+      if (data.atualizadas > 0) {
+        partes.push(`${data.atualizadas} contribuição${data.atualizadas > 1 ? "ões" : ""} atualizada${data.atualizadas > 1 ? "s" : ""}`);
+      }
+      if (data.falharam > 0) {
+        partes.push(`${data.falharam} falharam ao consultar (veja os logs do servidor)`);
+      }
+      if (partes.length === 0) {
+        partes.push(data.verificadas === 0 ? "Nenhuma pendência encontrada." : "Nenhuma pendência confirmada como paga.");
+      }
+      setMensagemSync(partes.join(" — "));
+      await carregar();
+    } catch (err) {
+      setMensagemSync(err.message || "Não consegui sincronizar agora. Tenta de novo.");
+    } finally {
+      setSincronizando(false);
+    }
+  }
+
   if (erro) return <div className="dash">{erro}</div>;
   if (!dados) return <div className="dash">Carregando...</div>;
 
@@ -58,9 +91,20 @@ export default function Dashboard() {
         <h1 style={{ fontFamily: "var(--fonte-display)", color: "var(--verde-profundo)" }}>
           Dashboard do chá
         </h1>
-        <button className="botao botao--contorno" onClick={sair} style={{ borderColor: "rgba(35,40,31,0.2)", color: "var(--verde-profundo)" }}>
-          Sair
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          {mensagemSync && <span style={{ fontSize: 13, color: "var(--verde-profundo)" }}>{mensagemSync}</span>}
+          <button
+            className="botao botao--contorno"
+            onClick={sincronizarPagamentos}
+            disabled={sincronizando}
+            style={{ borderColor: "rgba(35,40,31,0.2)", color: "var(--verde-profundo)" }}
+          >
+            {sincronizando ? "Sincronizando..." : "Sincronizar pagamentos pendentes"}
+          </button>
+          <button className="botao botao--contorno" onClick={sair} style={{ borderColor: "rgba(35,40,31,0.2)", color: "var(--verde-profundo)" }}>
+            Sair
+          </button>
+        </div>
       </div>
 
       <div className="dash__conteudo">
