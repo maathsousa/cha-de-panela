@@ -97,11 +97,11 @@ export default function Dashboard() {
             className="botao botao--contorno"
             onClick={sincronizarPagamentos}
             disabled={sincronizando}
-            style={{ borderColor: "rgba(35,40,31,0.2)", color: "var(--verde-profundo)" }}
+            style={{ borderColor: "rgba(0,48,73,0.2)", color: "var(--verde-profundo)" }}
           >
             {sincronizando ? "Sincronizando..." : "Sincronizar pagamentos pendentes"}
           </button>
-          <button className="botao botao--contorno" onClick={sair} style={{ borderColor: "rgba(35,40,31,0.2)", color: "var(--verde-profundo)" }}>
+          <button className="botao botao--contorno" onClick={sair} style={{ borderColor: "rgba(0,48,73,0.2)", color: "var(--verde-profundo)" }}>
             Sair
           </button>
         </div>

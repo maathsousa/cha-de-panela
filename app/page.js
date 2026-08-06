@@ -8,9 +8,9 @@ export default function Home() {
       {/* Edite os textos abaixo (nomes, data, local) com as informações reais do seu chá */}
       <section className="hero">
         <div className="container">
-          <span className="hero__etiqueta">Chá de Panela</span>
+          <span className="hero__etiqueta">Chá Bar</span>
           <h1 className="hero__titulo">
-            Matheus <em>&</em> [Nome dela]
+            Grazi <em>&</em> Matheus
           </h1>
           <p className="hero__subtitulo">
             A gente está montando a nossa casa nova e queria muito ter você com a gente
@@ -90,7 +90,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="footer">Feito com carinho por Matheus &amp; [Nome dela] 💛</footer>
+      <footer className="footer">Feito com carinho por Grazi &amp; Matheus 💛</footer>
     </main>
   );
 }

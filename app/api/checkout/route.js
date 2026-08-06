@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "../../../lib/supabase";
 import { criarPreferencia } from "../../../lib/mercadopago";
+import { VALOR_MINIMO_CONTRIBUICAO } from "../../../lib/config";
 
 export async function POST(request) {
   const { giftId, compradorNome, valor } = await request.json();
@@ -39,6 +40,16 @@ export async function POST(request) {
   if (valorContribuicao > falta + 0.01) {
     return NextResponse.json(
       { erro: "Esse valor é maior do que ainda falta arrecadar pra esse presente." },
+      { status: 400 }
+    );
+  }
+
+  const minimoPermitido = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
+  if (valorContribuicao < minimoPermitido - 0.01) {
+    return NextResponse.json(
+      {
+        erro: `Contribuição mínima de R$ ${VALOR_MINIMO_CONTRIBUICAO.toFixed(2).replace(".", ",")} (ou o valor que falta, se for menor).`,
+      },
       { status: 400 }
     );
   }

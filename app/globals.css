@@ -1,15 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap");
 
 :root {
-  --verde-escuro: #26332a;
-  --verde-profundo: #1a2219;
-  --linho: #f5efe1;
-  --linho-alt: #ede4cf;
-  --latao: #c6a15b;
-  --latao-claro: #ddc088;
-  --ferrugem: #8a4a38;
-  --texto-escuro: #23281f;
-  --texto-claro: #f5efe1;
+  --verde-escuro: #003049;
+  --verde-profundo: #003049;
+  --linho: #fdf0d5;
+  --linho-alt: #f6e2bb;
+  --latao: #c1121f;
+  --latao-claro: #669bbc;
+  --ferrugem: #780000;
+  --texto-escuro: #003049;
+  --texto-claro: #fdf0d5;
 
   --fonte-display: "Fraunces", serif;
   --fonte-corpo: "Work Sans", sans-serif;
@@ -77,7 +77,7 @@ button {
   text-align: center;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(198, 161, 91, 0.16), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(193, 18, 31, 0.16), transparent 70%),
     var(--verde-escuro);
 }
 
@@ -89,8 +89,8 @@ button {
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--latao-claro);
-  border: 1px solid rgba(198, 161, 91, 0.4);
+  color: var(--texto-claro);
+  border: 1.7px solid var(--ferrugem);
   padding: 6px 14px;
   border-radius: 999px;
   opacity: 0;
@@ -108,7 +108,7 @@ button {
 
 .hero__titulo em {
   font-style: italic;
-  color: var(--latao-claro);
+  color: var(--latao);
 }
 
 .hero__subtitulo {
@@ -116,7 +116,7 @@ button {
   max-width: 480px;
   font-size: 17px;
   line-height: 1.6;
-  color: rgba(245, 239, 225, 0.78);
+  color: rgba(253, 240, 213, 0.78);
   opacity: 0;
   animation: subir 0.7s ease 0.2s forwards;
 }
@@ -134,8 +134,8 @@ button {
 .hero__detalhe {
   font-family: var(--fonte-mono);
   font-size: 13px;
-  background: rgba(245, 239, 225, 0.08);
-  border: 1px solid rgba(245, 239, 225, 0.16);
+  background: rgba(253, 240, 213, 0.08);
+  border: 1px solid rgba(253, 240, 213, 0.16);
   padding: 10px 16px;
   border-radius: 10px;
   color: var(--texto-claro);
@@ -182,7 +182,7 @@ button {
 
 .botao--latao {
   background: var(--latao);
-  color: var(--verde-profundo);
+  color: var(--linho);
 }
 
 .botao--latao:hover {
@@ -191,7 +191,7 @@ button {
 
 .botao--contorno {
   background: transparent;
-  border-color: rgba(245, 239, 225, 0.35);
+  border-color: rgba(253, 240, 213, 0.35);
   color: var(--texto-claro);
 }
 
@@ -232,18 +232,18 @@ button {
   margin-top: 14px;
   max-width: 560px;
   line-height: 1.65;
-  color: rgba(35, 40, 31, 0.75);
+  color: rgba(0, 48, 73, 0.75);
 }
 
 /* ---------- FICHA (cartão estilo receita - elemento assinatura) ---------- */
 
 .ficha {
   position: relative;
-  background: #fffdf7;
+  background: #fffaf0;
   border-radius: 4px;
   padding: 26px;
-  box-shadow: 0 1px 2px rgba(35, 40, 31, 0.06), 0 10px 24px -12px rgba(35, 40, 31, 0.18);
-  border: 1px dashed rgba(138, 74, 56, 0.35);
+  box-shadow: 0 1px 2px rgba(0, 48, 73, 0.06), 0 10px 24px -12px rgba(0, 48, 73, 0.18);
+  border: 1px dashed rgba(120, 0, 0, 0.35);
 }
 
 .ficha::before {
@@ -282,8 +282,8 @@ button {
 }
 
 .passo {
-  background: #fffdf7;
-  border: 1px solid rgba(35, 40, 31, 0.08);
+  background: #fffaf0;
+  border: 1px solid rgba(0, 48, 73, 0.08);
   border-radius: 10px;
   padding: 24px 20px;
 }
@@ -291,8 +291,8 @@ button {
 .passo__numero {
   font-family: var(--fonte-mono);
   font-size: 13px;
-  color: var(--latao);
-  background: var(--verde-profundo);
+  color: var(--linho-alt);
+  background: var(--latao);
   width: 28px;
   height: 28px;
   display: flex;
@@ -306,14 +306,14 @@ button {
   font-family: var(--fonte-display);
   font-size: 19px;
   font-weight: 600;
-  color: var(--verde-profundo);
+  color: var(--verde-escuro);
 }
 
 .passo__texto {
   margin-top: 8px;
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(35, 40, 31, 0.7);
+  color: rgba(0, 48, 73, 0.7);
 }
 
 /* ---------- RSVP ---------- */
@@ -342,8 +342,8 @@ button {
   width: 100%;
   padding: 11px 13px;
   border-radius: 8px;
-  border: 1px solid rgba(35, 40, 31, 0.18);
-  background: #fffdf7;
+  border: 1px solid rgba(0, 48, 73, 0.18);
+  background: #fffaf0;
   font-family: var(--fonte-corpo);
   font-size: 15px;
   color: var(--texto-escuro);
@@ -369,8 +369,8 @@ button {
   flex: 1;
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid rgba(35, 40, 31, 0.18);
-  background: #fffdf7;
+  border: 1px solid rgba(0, 48, 73, 0.18);
+  background: #fffaf0;
   font-weight: 600;
   font-size: 14px;
   color: var(--texto-escuro);
@@ -397,9 +397,9 @@ button {
 }
 
 .mensagem-status--erro {
-  background: rgba(138, 74, 56, 0.1);
+  background: rgba(120, 0, 0, 0.1);
   color: var(--ferrugem);
-  border: 1px solid rgba(138, 74, 56, 0.25);
+  border: 1px solid rgba(120, 0, 0, 0.25);
 }
 
 /* ---------- PRESENTES ---------- */
@@ -435,7 +435,7 @@ button {
   margin-top: 6px;
   font-size: 13.5px;
   line-height: 1.5;
-  color: rgba(35, 40, 31, 0.65);
+  color: rgba(0, 48, 73, 0.65);
   min-height: 20px;
 }
 
@@ -446,7 +446,7 @@ button {
 .progresso__barra {
   height: 6px;
   border-radius: 999px;
-  background: rgba(35, 40, 31, 0.1);
+  background: rgba(0, 48, 73, 0.1);
   overflow: hidden;
 }
 
@@ -462,7 +462,7 @@ button {
   margin-top: 6px;
   font-family: var(--fonte-mono);
   font-size: 11.5px;
-  color: rgba(35, 40, 31, 0.6);
+  color: rgba(0, 48, 73, 0.6);
 }
 
 .presente__acao {
@@ -476,7 +476,7 @@ button {
   font-family: var(--fonte-mono);
   font-size: 12px;
   color: var(--ferrugem);
-  background: rgba(138, 74, 56, 0.1);
+  background: rgba(120, 0, 0, 0.1);
   padding: 6px 10px;
   border-radius: 999px;
 }
@@ -486,7 +486,7 @@ button {
 .modal-fundo {
   position: fixed;
   inset: 0;
-  background: rgba(26, 34, 25, 0.6);
+  background: rgba(0, 48, 73, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -495,7 +495,7 @@ button {
 }
 
 .modal {
-  background: #fffdf7;
+  background: #fffaf0;
   color: var(--texto-escuro);
   border-radius: 12px;
   padding: 28px;
@@ -506,7 +506,7 @@ button {
 .modal__fechar {
   background: none;
   border: none;
-  color: rgba(35, 40, 31, 0.5);
+  color: rgba(0, 48, 73, 0.5);
   font-size: 14px;
   margin-top: 12px;
 }
@@ -518,7 +518,7 @@ button {
   text-align: center;
   padding: 40px 24px;
   font-size: 13px;
-  color: rgba(245, 239, 225, 0.5);
+  color: rgba(253, 240, 213, 0.5);
 }
 
 /* ---------- DASHBOARD ---------- */
@@ -548,8 +548,8 @@ button {
 }
 
 .dash-card {
-  background: #fffdf7;
-  border: 1px solid rgba(35, 40, 31, 0.1);
+  background: #fffaf0;
+  border: 1px solid rgba(0, 48, 73, 0.1);
   border-radius: 12px;
   padding: 24px;
 }
@@ -569,7 +569,7 @@ button {
 
 .metrica__rotulo {
   font-size: 12.5px;
-  color: rgba(35, 40, 31, 0.6);
+  color: rgba(0, 48, 73, 0.6);
   margin-top: 4px;
 }
 
@@ -583,7 +583,7 @@ th,
 td {
   text-align: left;
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(35, 40, 31, 0.08);
+  border-bottom: 1px solid rgba(0, 48, 73, 0.08);
 }
 
 th {
@@ -591,13 +591,13 @@ th {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(35, 40, 31, 0.55);
+  color: rgba(0, 48, 73, 0.55);
 }
 
 .login-box {
   max-width: 360px;
   margin: 120px auto;
-  background: #fffdf7;
+  background: #fffaf0;
   padding: 32px;
   border-radius: 12px;
 }

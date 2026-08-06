@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import GiftCard from "./GiftCard";
+import { VALOR_MINIMO_CONTRIBUICAO } from "../lib/config";
 
 const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -59,6 +60,12 @@ export default function GiftList() {
       return;
     }
 
+    const minimo = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
+    if (valor < minimo - 0.01) {
+      setErroModal(`Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, se for menor).`);
+      return;
+    }
+
     setRedirecionando(true);
     setErroModal(null);
 
@@ -89,14 +96,18 @@ export default function GiftList() {
         ))}
       </div>
 
-      {selecionado && (
+      {selecionado && (() => {
+        const falta = Math.max(0, Number(selecionado.valor) - Number(selecionado.arrecadado || 0));
+        const minimo = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
+        return (
         <div className="modal-fundo" onClick={fecharModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <span className="ficha__rotulo">Contribuir</span>
             <h3 style={{ marginTop: 8 }}>{selecionado.nome}</h3>
-            <p style={{ fontSize: 14, color: "rgba(35,40,31,0.65)", marginTop: 6 }}>
-              Falta {formatador.format(Math.max(0, Number(selecionado.valor) - Number(selecionado.arrecadado || 0)))}{" "}
-              pra completar esse presente. Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
+            <p style={{ fontSize: 14, color: "rgba(0,48,73,0.65)", marginTop: 6 }}>
+              Falta {formatador.format(falta)} pra completar esse presente. Contribua com pelo menos{" "}
+              {formatador.format(minimo)} (ou o valor que falta, o que for menor). Você será levado(a) ao pagamento
+              seguro do Mercado Pago (Pix ou cartão).
             </p>
 
             <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
@@ -118,8 +129,8 @@ export default function GiftList() {
                   id="valorContribuicao"
                   type="number"
                   step="0.01"
-                  min="1"
-                  max={Math.max(0, Number(selecionado.valor) - Number(selecionado.arrecadado || 0))}
+                  min={minimo}
+                  max={falta}
                   value={valorContribuicao}
                   onChange={(e) => setValorContribuicao(e.target.value)}
                 />
@@ -141,7 +152,8 @@ export default function GiftList() {
             </form>
           </div>
         </div>
-      )}
+        );
+      })()}
     </>
   );
 }

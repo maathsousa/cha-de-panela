@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Chá de Panela — Matheus & [Nome dela]",
+  title: "Chá Bar - Grazi e Matheus",
   description: "Confirme sua presença e nos ajude a montar a nossa casa nova.",
 };
 
