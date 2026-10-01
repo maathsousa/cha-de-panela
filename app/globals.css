@@ -82,14 +82,7 @@ button {
 }
 
 .endereco_link{
-  display: inline-block;
-  margin-top: 20px;
-  padding: 8px 16px;    
-  border: 1px solid #365b6b;
-  border-radius: 9px;
-  background-color: rgba(255, 255, 255, 0.04);    
-  color: #d6d6d6;
-  transition: all 0.2s ease;
+  margin-top: 20px; 
 }
 
 .endereco_link:hover{
