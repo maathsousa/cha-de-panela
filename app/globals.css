@@ -432,6 +432,14 @@ em {
   transform: rotate(var(--tilt, 0deg));
 }
 
+.presente__imagem {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
 .presente__valor {
   font-family: var(--fonte-mono);
   font-size: 22px;
