@@ -7,7 +7,7 @@ export async function GET() {
   const [gifts, contributions] = await Promise.all([
     supabasePublic
       .from("gifts")
-      .select("id, nome, descricao, valor, imagem_url, status")
+      .select("id, nome, descricao, valor, imagem_url, status, pagamento_unico")
       .order("valor", { ascending: true }),
     supabasePublic.from("contributions").select("gift_id, valor").eq("status", "pago"),
   ]);
