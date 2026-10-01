@@ -39,28 +39,28 @@ export default function Home() {
       <section className="secao-clara">
         <div className="container">
           <span className="secao__eyebrow">Como funciona</span>
-          <h2 className="secao__titulo">Presentear é simples</h2>
+          <h2 className="secao__titulo">Um presente ajuda a construir nosso lar</h2>
 
           <div className="passos">
             <div className="passo">
               <div className="passo__numero">1</div>
-              <p className="passo__titulo">Escolha um presente</p>
+              <p className="passo__titulo">Escolha como quer participar</p>
               <p className="passo__texto">
-                Separamos uma listinha do que vai nos ajudar a montar a casa nova.
+                Você pode presentear um item específico da nossa lista ou contribuir com alguma etapa da reforma.
               </p>
             </div>
             <div className="passo">
               <div className="passo__numero">2</div>
-              <p className="passo__titulo">Pague com Pix ou cartão</p>
+              <p className="passo__titulo">Contribua do seu jeito.</p>
               <p className="passo__texto">
-                O pagamento é feito direto pelo Mercado Pago, de forma segura.
+                Alguns presentes possuem valor fixo. Já as etapas da reforma aceitam contribuições a partir de R$ 50 até atingir a meta. Podendo ser pago via PIX ou Cartão.
               </p>
             </div>
             <div className="passo">
               <div className="passo__numero">3</div>
               <p className="passo__titulo">Pronto!</p>
               <p className="passo__texto">
-                O presente sai da lista na hora, pra ninguém repetir sem querer.
+                O pagamento é realizado de forma segura pelo Mercado Pago e o progresso da lista é atualizado automaticamente
               </p>
             </div>
           </div>
