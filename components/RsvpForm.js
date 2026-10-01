@@ -32,10 +32,7 @@ export default function RsvpForm() {
 
       setStatus({
         tipo: "sucesso",
-        texto: confirmado
-          ? 'Confirmado! Vai ser muito bom ter você com a gente 💛<br><br>E já que você vai fazer parte desse momento, se quiser nos presentear, dá uma olhadinha na nossa <a href="https://cha-de-panela-flame.vercel.app/#presentes">lista de presentes</a> 🎁'
-          : 'Poxa, vamos sentir muito a sua falta! 💛 Obrigado por nos avisar e, mesmo não podendo estar com a gente nesse dia, você continua fazendo parte desse momento tão especial.<br><br>Se quiser e puder nos ajudar de alguma forma, deixamos também nossa <a href="https://cha-de-panela-flame.vercel.app/#presentes">lista de presentes</a> 🎁',
-
+        confirmado,
       });
       setNome("");
       setAcompanhantes(0);
@@ -113,9 +110,33 @@ export default function RsvpForm() {
         {enviando ? "Enviando..." : "Confirmar"}
       </button>
 
-      {status && (
-        <p className={`mensagem-status mensagem-status--${status.tipo}`}>{status.texto}</p>
-      )}
+{status && (
+  <div className={`mensagem-status mensagem-status--${status.tipo}`}>
+    {status.tipo === "erro" ? (
+      status.texto
+    ) : status.confirmado ? (
+      <>
+        Confirmado! Vai ser muito bom ter você com a gente 💛
+        <br />
+        <br />
+        E já que você vai fazer parte desse momento, se quiser nos presentear,
+        dá uma olhadinha na nossa{" "}
+        <a href="#presentes">lista de presentes</a> 🎁
+      </>
+    ) : (
+      <>
+        Poxa, vamos sentir muito a sua falta! 💛 Obrigado por nos avisar e,
+        mesmo não podendo estar com a gente nesse dia, você continua fazendo
+        parte desse momento tão especial.
+        <br />
+        <br />
+        Se quiser e puder nos ajudar de alguma forma, deixamos também nossa{" "}
+        <a href="#presentes">lista de presentes</a> 🎁
+      </>
+    )}
+  </div>
+)}
+
     </form>
   );
 }
