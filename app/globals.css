@@ -113,7 +113,7 @@ button {
 
 .hero__subtitulo {
   margin: 20px auto 0;
-  max-width: 480px;
+  max-width: 100%;
   font-size: 17px;
   line-height: 1.6;
   color: rgba(253, 240, 213, 0.78);
@@ -230,7 +230,7 @@ button {
 
 .secao__texto {
   margin-top: 14px;
-  max-width: 560px;
+  max-width: 100%;
   line-height: 1.65;
   color: rgba(0, 48, 73, 0.75);
 }
