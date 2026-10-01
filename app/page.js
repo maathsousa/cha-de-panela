@@ -35,8 +35,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== RSVP ===== */}
+      <section className="secao-clara" id="confirmar" style={{ padding: "88px 24px" }}>
+        <div className="container">
+          <span className="hero__etiqueta">RSVP</span>
+          <h2 className="hero__titulo" style={{ fontSize: "clamp(30px, 5vw, 44px)", marginTop: 20 }}>
+            Você vem?
+          </h2>
+          <p className="hero__subtitulo">Confirmar até 15/10/2026 para nos organizarmos.</p>
+          <RsvpForm />
+        </div>
+      </section>
+
       {/* ===== COMO FUNCIONA ===== */}
-      <section className="secao-clara">
+      <section className="hero">
         <div className="container">
           <span className="secao__eyebrow">Como funciona</span>
           <h2 className="secao__titulo">Um presente ajuda a construir nosso lar</h2>
@@ -64,18 +76,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ===== RSVP ===== */}
-      <section className="hero" id="confirmar" style={{ padding: "88px 24px" }}>
-        <div className="container">
-          <span className="hero__etiqueta">RSVP</span>
-          <h2 className="hero__titulo" style={{ fontSize: "clamp(30px, 5vw, 44px)", marginTop: 20 }}>
-            Você vem?
-          </h2>
-          <p className="hero__subtitulo">Confirmar até 15/10/2026 para nos organizarmos.</p>
-          <RsvpForm />
         </div>
       </section>
 
