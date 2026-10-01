@@ -111,7 +111,7 @@ button {
   color: var(--latao);
 }
 
-.em {
+em {
   font-style: italic;
   color: var(--latao);
 }
