@@ -74,7 +74,7 @@ export default function Home() {
           <h2 className="hero__titulo" style={{ fontSize: "clamp(30px, 5vw, 44px)", marginTop: 20 }}>
             Você vem?
           </h2>
-          <p className="hero__subtitulo">Confirma até 15/10/2026 pra gente se organizar direitinho.</p>
+          <p className="hero__subtitulo">Confirmar até 15/10/2026 para nos organizarmos.</p>
           <RsvpForm />
         </div>
       </section>
