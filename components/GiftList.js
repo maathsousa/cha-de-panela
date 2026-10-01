@@ -107,9 +107,10 @@ export default function GiftList() {
             <span className="ficha__rotulo">Contribuir</span>
             <h3 style={{ marginTop: 8 }}>{selecionado.nome}</h3>
             <p style={{ fontSize: 14, color: "rgba(0,48,73,0.65)", marginTop: 6 }}>
-              Falta {formatador.format(falta)} pra completar esse presente. Contribua com pelo menos{" "}
-              {formatador.format(minimo)} (ou o valor que falta, o que for menor). Você será levado(a) ao pagamento
-              seguro do Mercado Pago (Pix ou cartão).
+              {selecionado.pagamento_unico
+                ? `Esse presente é só em pagamento único, no valor cheio de ${formatador.format(falta)}.`
+                : `Falta ${formatador.format(falta)} pra completar esse presente. Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, o que for menor).`}{" "}
+              Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
             </p>
 
             <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
