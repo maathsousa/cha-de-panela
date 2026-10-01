@@ -15,8 +15,7 @@ export default function Home() {
           <p className="hero__subtitulo">
           Estamos prestes a dar mais um passo muito importante na nossa história e não
           poderíamos viver esse momento sem as pessoas que fazem parte dela.
-          Para comemorar a conquista do nosso primeiro apartamento, preparamos um <em>Chá Bar</em>
-          e será uma alegria ter você com a gente nesse dia tão especial.
+          Para comemorar a conquista do nosso primeiro apartamento, preparamos um <em>Chá Bar</em> e será uma alegria ter você com a gente nesse dia tão especial.
           </p>
 
           <div className="hero__detalhes">
