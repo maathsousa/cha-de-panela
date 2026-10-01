@@ -682,13 +682,13 @@ th {
   }
 
   .hero__pessoa--grazi {
-    right: calc(50% + 75px);
+    right: calc(50% + 30px);
     bottom: -5px;
     transform: rotate(-5deg);
   }
 
   .hero__pessoa--matheus {
-    left: calc(50% + 75px);
+    left: calc(50% + 60px);
     bottom: -5px;
     transform: rotate(5deg);
   }
