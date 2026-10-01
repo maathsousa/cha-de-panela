@@ -106,16 +106,56 @@ button {
   animation: subir 0.7s ease forwards;
 }
 
+.hero__nomes {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 270px;
+  margin-top: 20px;
+}
+
 .hero__titulo {
-  margin-top: 28px;
+  position: relative;
+  z-index: 3;
+
+  margin: 28px 0 0;
   font-size: clamp(40px, 7vw, 68px);
   line-height: 1.05;
   color: var(--texto-claro);
+
   opacity: 0;
   animation: subir 0.7s ease 0.1s forwards;
 }
 
+.hero__pessoa {
+  position: absolute;
+  z-index: 1;
+
+  height: 250px;
+  width: auto;
+
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__pessoa--grazi {
+  right: calc(50% + 155px);
+  bottom: -15px;
+  transform: rotate(-7deg);
+}
+
+.hero__pessoa--matheus {
+  left: calc(50% + 155px);
+  bottom: -15px;
+  transform: rotate(7deg);
+}
+
 .hero__titulo em {
+  position: relative;
+  z-index: 4;
+
   font-style: italic;
   color: var(--latao);
 }
@@ -626,3 +666,31 @@ th {
   padding: 32px;
   border-radius: 12px;
 }
+
+
+@media (max-width: 700px) {
+  .hero__nomes {
+    min-height: 220px;
+  }
+
+  .hero__titulo {
+    font-size: clamp(38px, 11vw, 54px);
+  }
+
+  .hero__pessoa {
+    height: 195px;
+  }
+
+  .hero__pessoa--grazi {
+    right: calc(50% + 75px);
+    bottom: -5px;
+    transform: rotate(-5deg);
+  }
+
+  .hero__pessoa--matheus {
+    left: calc(50% + 75px);
+    bottom: -5px;
+    transform: rotate(5deg);
+  }
+}
+
