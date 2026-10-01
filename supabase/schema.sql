@@ -59,10 +59,4 @@ create policy "select_contributions_pagas_publico"
 -- /api/webhook e /api/dashboard-data), que ignora RLS. Não é preciso policy adicional para isso.
 
 -- Exemplo de como popular sua lista de presentes (edite valores e nomes):
-insert into gifts (nome, descricao, valor, imagem_url) values
-  ('Jogo de panelas', 'Um conjunto de panelas antiaderentes pra estrear a cozinha', 350.00, null),
-  ('Liquidificador', 'Pra vitaminas e sucos de fim de semana', 220.00, null),
-  ('Jogo de toalhas', 'Toalhas de banho macias pra casa nova', 150.00, null),
-  ('Air fryer', 'A queridinha da cozinha moderna', 400.00, null),
-  ('Kit de temperos', 'Especiarias pra deixar tudo com mais sabor', 90.00, null),
-  ('Ajuda com o sofá', 'Uma cota pra ajudar no sofá da sala', 500.00, null);
+
