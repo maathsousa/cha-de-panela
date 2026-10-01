@@ -9,9 +9,24 @@ export default function Home() {
       <section className="hero">
         <div className="container">
           <span className="hero__etiqueta">Chá Bar</span>
-          <h1 className="hero__titulo">
-            Grazi <em>&</em> Matheus
-          </h1>
+          <div className="hero__nomes">
+            <img
+              src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/grazi.png"
+              alt=""
+              className="hero__pessoa hero__pessoa--grazi"
+            />
+          
+            <h1 className="hero__titulo">
+              Grazi <em>&</em> Matheus
+            </h1>
+          
+            <img
+              src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/matheus.png"
+              alt=""
+              className="hero__pessoa hero__pessoa--matheus"
+            />
+          </div>
+
           <p className="hero__subtitulo">
           Estamos prestes a dar mais um passo muito importante na nossa história e não
           poderíamos viver esse momento sem as pessoas que fazem parte dela.
