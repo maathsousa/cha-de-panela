@@ -11,6 +11,9 @@ export default function GiftCard({ presente, indice, onPresentear }) {
 
   return (
     <div className="ficha presente" style={{ "--tilt": tilt }}>
+      {presente.imagem_url && (
+        <img src={presente.imagem_url} alt={presente.nome} className="presente__imagem" />
+      )}
       <span className="ficha__rotulo">Presente</span>
       <p className="presente__nome">{presente.nome}</p>
       {presente.descricao && <p className="presente__descricao">{presente.descricao}</p>}
