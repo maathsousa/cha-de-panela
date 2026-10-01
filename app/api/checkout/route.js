@@ -33,7 +33,8 @@ export async function POST(request) {
   const arrecadado = (pagas || []).reduce((soma, c) => soma + Number(c.valor), 0);
   const falta = Number(gift.valor) - arrecadado;
 
-  const valorContribuicao = Number(valor);
+  const valorContribuicao = gift.pagamento_unico ? falta : Number(valor);
+
   if (!Number.isFinite(valorContribuicao) || valorContribuicao <= 0) {
     return NextResponse.json({ erro: "Informe um valor de contribuição válido." }, { status: 400 });
   }
@@ -44,14 +45,16 @@ export async function POST(request) {
     );
   }
 
-  const minimoPermitido = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
-  if (valorContribuicao < minimoPermitido - 0.01) {
-    return NextResponse.json(
-      {
-        erro: `Contribuição mínima de R$ ${VALOR_MINIMO_CONTRIBUICAO.toFixed(2).replace(".", ",")} (ou o valor que falta, se for menor).`,
-      },
-      { status: 400 }
-    );
+  if (!gift.pagamento_unico) {
+    const minimoPermitido = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
+    if (valorContribuicao < minimoPermitido - 0.01) {
+      return NextResponse.json(
+        {
+          erro: `Contribuição mínima de R$ ${VALOR_MINIMO_CONTRIBUICAO.toFixed(2).replace(".", ",")} (ou o valor que falta, se for menor).`,
+        },
+        { status: 400 }
+      );
+    }
   }
 
   try {
