@@ -13,8 +13,10 @@ export default function Home() {
             Grazi <em>&</em> Matheus
           </h1>
           <p className="hero__subtitulo">
-            A gente está montando a nossa casa nova e queria muito ter você com a gente
-            nesse dia. Confirme presença e, se quiser, nos ajude com um presentinho.
+          Estamos prestes a dar mais um passo muito importante na nossa história e não
+          poderíamos viver esse momento sem as pessoas que fazem parte dela.
+          Para comemorar a conquista do nosso primeiro apartamento, preparamos um <em>Chá Bar</em>
+          e será uma alegria ter você com a gente nesse dia tão especial.
           </p>
 
           <div className="hero__detalhes">
@@ -82,9 +84,11 @@ export default function Home() {
       <section className="secao-clara" id="presentes">
         <div className="container">
           <span className="secao__eyebrow">Lista de presentes</span>
-          <h2 className="secao__titulo">Uma ajudinha pra casa nova</h2>
+          <h2 className="secao__titulo">A sua presença é o nosso maior presente!</h2>
           <p className="secao__texto">
-            Nada de presente repetido: quando alguém presenteia, o item sai da lista na hora.
+            Mas, se também quiser nos presentear, preparamos uma lista com contribuições para a reforma e alguns itens que ainda
+            faltam para o nosso novo lar. Por isso, não faremos uma lista de presentes tradicionais. Assim, 
+            não será necessário levar presente no dia do evento, pois toda a nossa lista foi pensada para reunir exatamente aquilo de que ainda precisamos.
           </p>
           <GiftList />
         </div>
