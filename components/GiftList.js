@@ -60,10 +60,12 @@ export default function GiftList() {
       return;
     }
 
-    const minimo = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
-    if (valor < minimo - 0.01) {
-      setErroModal(`Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, se for menor).`);
-      return;
+    if (!selecionado.pagamento_unico) {
+      const minimo = Math.min(VALOR_MINIMO_CONTRIBUICAO, falta);
+      if (valor < minimo - 0.01) {
+        setErroModal(`Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, se for menor).`);
+        return;
+      }
     }
 
     setRedirecionando(true);
@@ -124,16 +126,19 @@ export default function GiftList() {
               </div>
 
               <div className="campo">
-                <label htmlFor="valorContribuicao">Quanto você quer contribuir?</label>
-                <input
-                  id="valorContribuicao"
-                  type="number"
-                  step="0.01"
-                  min={minimo}
-                  max={falta}
-                  value={valorContribuicao}
-                  onChange={(e) => setValorContribuicao(e.target.value)}
-                />
+                  <label htmlFor="valorContribuicao">
+                    {selecionado.pagamento_unico ? "Valor (pagamento único)" : "Quanto você quer contribuir?"}
+                  </label>
+                  <input
+                    id="valorContribuicao"
+                    type="number"
+                    step="0.01"
+                    min={minimo}
+                    max={falta}
+                    value={valorContribuicao}
+                    readOnly={selecionado.pagamento_unico}
+                    onChange={(e) => setValorContribuicao(e.target.value)}
+                  />
               </div>
 
               {erroModal && <p className="mensagem-status mensagem-status--erro">{erroModal}</p>}
