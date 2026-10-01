@@ -27,5 +27,8 @@ export async function GET() {
     arrecadado: arrecadadoPorGift[g.id] || 0,
   }));
 
-  return NextResponse.json({ presentes });
+return NextResponse.json(
+  { presentes: data },
+  { headers: { "Cache-Control": "no-store, max-age=0, must-revalidate" } }
+);
 }
