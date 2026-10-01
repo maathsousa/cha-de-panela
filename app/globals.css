@@ -141,13 +141,13 @@ button {
 }
 
 .hero__pessoa--grazi {
-  right: calc(50% + 155px);
+  right: calc(50% + 222px);
   bottom: -15px;
   transform: rotate(-7deg);
 }
 
 .hero__pessoa--matheus {
-  left: calc(50% + 155px);
+  left: calc(50% + 222px);
   bottom: -15px;
   transform: rotate(7deg);
 }
