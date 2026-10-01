@@ -38,11 +38,10 @@ export default function Home() {
       {/* ===== RSVP ===== */}
       <section className="secao-clara" id="confirmar" style={{ padding: "88px 24px" }}>
         <div className="container">
-          <span className="secao__eyebrow">RSVP</span>
           <h2 className="secao__titulo" style={{ fontSize: "clamp(30px, 5vw, 44px)", marginTop: 20 }}>
             Você vem?
           </h2>
-          <p className="hero__subtitulo">Confirmar até 15/10/2026 para nos organizarmos.</p>
+          <p className="secao__titulo">Confirmar até 15/10/2026 para nos organizarmos.</p>
           <RsvpForm />
         </div>
       </section>
