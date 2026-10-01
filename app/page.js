@@ -21,7 +21,7 @@ export default function Home() {
           <div className="hero__detalhes">
             <span className="hero__detalhe">📅 Sábado, 07/11/2026</span>
             <span className="hero__detalhe">🕒 Começa às 15h00</span><br>
-            <a href="https://share.google/DddBvvX171h2BRpvQ" target="_blank" rel="noopener noreferrer" class="mt-5"><span className="hero__detalhe">📍 R. José Bonifácio Filho, 226 - Jardim Sao Benedito, São Paulo - SP, 04813-060, Brasil</span></a>
+            <a href="https://share.google/DddBvvX171h2BRpvQ" target="_blank" rel="noopener noreferrer" class="mt-5 inline-block rounded-lg border border-slate-600 bg-slate-800/50 px-4 py-2 text-slate-200 underline transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-700/70 hover:text-white hover:shadow-md"><span className="hero__detalhe">📍 R. José Bonifácio Filho, 226 - Jardim Sao Benedito, São Paulo - SP, 04813-060, Brasil</span></a>
           </div>
 
           <div className="hero__cta">
