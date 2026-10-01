@@ -18,9 +18,9 @@ export default function Home() {
           </p>
 
           <div className="hero__detalhes">
-            <span className="hero__detalhe">📅 [Dia da semana], [data]</span>
-            <span className="hero__detalhe">🕒 [horário]</span>
-            <span className="hero__detalhe">📍 [local / endereço]</span>
+            <span className="hero__detalhe">📅 Sábado, 07/11/2026</span>
+            <span className="hero__detalhe">🕒 Começa às 15h00</span>
+            <span className="hero__detalhe">📍 R. José Bonifácio Filho, 226 - Jardim Sao Benedito, São Paulo - SP, 04813-060, Brasil</span>
           </div>
 
           <div className="hero__cta">
