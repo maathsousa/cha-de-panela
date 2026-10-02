@@ -568,6 +568,41 @@ em {
   width: 100%;
 }
 
+.chave-pix {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(198, 161, 91, 0.12);
+  border: 1px solid rgba(198, 161, 91, 0.3);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.chave-pix__texto {
+  font-size: 13px;
+  color: var(--texto-escuro);
+  word-break: break-all;
+}
+
+.chave-pix__botao {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--latao);
+  background: #fffdf7;
+  color: var(--verde-profundo);
+  transition: background 0.15s ease;
+}
+
+.chave-pix__botao:hover {
+  background: var(--latao);
+  color: var(--verde-profundo);
+}
+
 .modal__colunas {
   display: flex;
   gap: 24px;
