@@ -104,58 +104,64 @@ export default function GiftList() {
         return (
         <div className="modal-fundo" onClick={fecharModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <span className="ficha__rotulo">Contribuir</span>
-            <h3 style={{ marginTop: 8 }}>{selecionado.nome}</h3>
-            <p style={{ fontSize: 14, color: "rgba(0,48,73,0.65)", marginTop: 6 }}>
-              {selecionado.pagamento_unico
-                ? `Esse presente é só em pagamento único, no valor cheio de ${formatador.format(falta)}.`
-                : `Falta ${formatador.format(falta)} pra completar esse presente. Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, o que for menor).`}{" "}
-              Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
-            </p>
+            <div className="modal__colunas">
+              <div className="modal__coluna-form">
+                <span className="ficha__rotulo">Contribuir</span>
+                <h3 style={{ marginTop: 8 }}>{selecionado.nome}</h3>
+                <p style={{ fontSize: 14, color: "rgba(0,48,73,0.65)", marginTop: 6 }}>
+                  {selecionado.pagamento_unico
+                    ? `Esse presente é só em pagamento único, no valor cheio de ${formatador.format(falta)}.`
+                    : `Falta ${formatador.format(falta)} pra completar esse presente. Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, o que for menor).`}{" "}
+                  Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
+                </p>
 
-            <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
-              <div className="campo">
-                <label htmlFor="nomeComprador">Seu nome</label>
-                <input
-                  id="nomeComprador"
-                  type="text"
-                  value={nomeComprador}
-                  onChange={(e) => setNomeComprador(e.target.value)}
-                  placeholder="Pra sabermos quem presenteou"
-                  maxLength={120}
-                />
+                <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
+                  <div className="campo">
+                    <label htmlFor="nomeComprador">Seu nome</label>
+                    <input
+                      id="nomeComprador"
+                      type="text"
+                      value={nomeComprador}
+                      onChange={(e) => setNomeComprador(e.target.value)}
+                      placeholder="Pra sabermos quem presenteou"
+                      maxLength={120}
+                    />
+                  </div>
+
+                  <div className="campo">
+                      <label htmlFor="valorContribuicao">
+                        {selecionado.pagamento_unico ? "Valor (pagamento único)" : "Quanto você quer contribuir?"}
+                      </label>
+                      <input
+                        id="valorContribuicao"
+                        type="number"
+                        step="0.01"
+                        min={minimo}
+                        max={falta}
+                        value={valorContribuicao}
+                        readOnly={selecionado.pagamento_unico}
+                        onChange={(e) => setValorContribuicao(e.target.value)}
+                      />
+                  </div>
+
+                  {erroModal && <p className="mensagem-status mensagem-status--erro">{erroModal}</p>}
+
+                  <button
+                    type="submit"
+                    className="botao botao--latao"
+                    disabled={redirecionando}
+                    style={{ width: "100%", justifyContent: "center" }}
+                  >
+                    {redirecionando ? "Abrindo pagamento..." : "Ir para o pagamento"}
+                  </button>
+                  <button type="button" className="modal__fechar" onClick={fecharModal}>
+                    Cancelar
+                  </button>
+                </form>
               </div>
 
-              <div className="campo">
-                  <label htmlFor="valorContribuicao">
-                    {selecionado.pagamento_unico ? "Valor (pagamento único)" : "Quanto você quer contribuir?"}
-                  </label>
-                  <input
-                    id="valorContribuicao"
-                    type="number"
-                    step="0.01"
-                    min={minimo}
-                    max={falta}
-                    value={valorContribuicao}
-                    readOnly={selecionado.pagamento_unico}
-                    onChange={(e) => setValorContribuicao(e.target.value)}
-                  />
-              </div>
-
-              {erroModal && <p className="mensagem-status mensagem-status--erro">{erroModal}</p>}
-
-              <button
-                type="submit"
-                className="botao botao--latao"
-                disabled={redirecionando}
-                style={{ width: "100%", justifyContent: "center" }}
-              >
-                {redirecionando ? "Abrindo pagamento..." : "Ir para o pagamento"}
-              </button>
-              <button type="button" className="modal__fechar" onClick={fecharModal}>
-                Cancelar
-              </button>
-            </form>
+              <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix.png" alt="Ajude via Pix" className="modal__imagem-pix" />
+            </div>
           </div>
         </div>
         );
