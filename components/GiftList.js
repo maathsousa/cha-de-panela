@@ -170,9 +170,8 @@ async function copiarChavePix() {
                   </button>
                 </form>
               </div>
-
-              <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix-n.png" alt="Ajude via Pix" className="modal__imagem-pix" />
               <div className="chave-pix">
+              <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix-n.png" alt="Ajude via Pix" className="modal__imagem-pix" />
                 <span className="chave-pix__texto">
                   Chave Pix: <strong>{CHAVE_PIX}</strong>
                 </span>
