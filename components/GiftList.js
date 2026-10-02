@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import GiftCard from "./GiftCard";
-import { VALOR_MINIMO_CONTRIBUICAO } from "../lib/config";
+import { VALOR_MINIMO_CONTRIBUICAO, CHAVE_PIX } from "../lib/config";
 
 const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -14,6 +14,17 @@ export default function GiftList() {
   const [valorContribuicao, setValorContribuicao] = useState("");
   const [redirecionando, setRedirecionando] = useState(false);
   const [erroModal, setErroModal] = useState(null);
+  const [pixCopiado, setPixCopiado] = useState(false);
+
+async function copiarChavePix() {
+  try {
+    await navigator.clipboard.writeText(CHAVE_PIX);
+    setPixCopiado(true);
+    setTimeout(() => setPixCopiado(false), 2000);
+  } catch {
+    setPixCopiado(false);
+  }
+}
 
   useEffect(() => {
     carregarPresentes();
@@ -161,6 +172,14 @@ export default function GiftList() {
               </div>
 
               <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix-n.png" alt="Ajude via Pix" className="modal__imagem-pix" />
+              <div className="chave-pix">
+                <span className="chave-pix__texto">
+                  Chave Pix: <strong>{CHAVE_PIX}</strong>
+                </span>
+                <button type="button" className="chave-pix__botao" onClick={copiarChavePix}>
+                  {pixCopiado ? "Copiado! ✓" : "Copiar"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
