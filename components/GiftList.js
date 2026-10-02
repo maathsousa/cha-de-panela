@@ -160,7 +160,7 @@ export default function GiftList() {
                 </form>
               </div>
 
-              <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix.png" alt="Ajude via Pix" className="modal__imagem-pix" />
+              <img src="https://wlnfyonywlonyacrxmnk.supabase.co/storage/v1/object/public/presentes/pix-n.png" alt="Ajude via Pix" className="modal__imagem-pix" />
             </div>
           </div>
         </div>
