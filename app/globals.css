@@ -81,13 +81,24 @@ button {
     var(--verde-escuro);
 }
 
-.endereco_link{
-  margin-top: 20px; 
+.endereco_link {
+  text-decoration: none;
+  color: inherit;
+  max-width: 280px;
+  text-align: center;
+  line-height: 1.4;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.endereco_link:hover{
+.endereco_link:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 420px) {
+  .endereco_link {
+    max-width: 100%;
+  }
 }
 
 .hero__etiqueta {
