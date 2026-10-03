@@ -566,6 +566,9 @@ em {
   padding: 28px;
   max-width: 680px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chave-pix {
