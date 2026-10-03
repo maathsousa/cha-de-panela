@@ -30,6 +30,18 @@ async function copiarChavePix() {
     carregarPresentes();
   }, []);
 
+  useEffect(() => {
+  if (selecionado) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [selecionado]);
+
   async function carregarPresentes() {
     try {
       const res = await fetch("/api/gifts");
