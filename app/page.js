@@ -106,9 +106,10 @@ export default function Home() {
           <span className="secao__eyebrow">Lista de presentes</span>
           <h2 className="secao__titulo">A sua presença é o nosso maior presente!</h2>
           <p className="secao__texto">
-            Mas, se também quiser nos presentear, preparamos uma lista com contribuições para a reforma e alguns itens que ainda
-            faltam para o nosso novo lar. Por isso, não faremos uma lista de presentes tradicionais. Assim, 
-            não será necessário levar presente no dia do evento, pois toda a nossa lista foi pensada para reunir exatamente aquilo de que ainda precisamos.
+            Mas, se também quiser nos presentear, preparamos uma lista com contribuições para a reforma e alguns itens que ainda faltam para o nosso novo lar. Por isso, não faremos uma lista de presentes tradicionais. Assim, não será necessário levar presente no dia do evento, pois toda a nossa lista foi pensada para reunir exatamente aquilo de que ainda precisamos.
+
+<b>**As contribuições começam a partir de R$ 50,00, independentemente do valor total do item escolhido.**</b> Dessa forma, cada pessoa pode contribuir com o valor que desejar, ajudando um pouquinho a realizar cada um desses sonhos. ❤️
+
           </p>
           <GiftList />
         </div>
