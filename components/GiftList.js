@@ -105,17 +105,33 @@ async function copiarChavePix() {
     setErroModal(null);
 
     try {
+      const deviceId =
+        typeof window !== "undefined"
+          ? window.MP_DEVICE_SESSION_ID
+          : undefined;
+    
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ giftId: selecionado.id, compradorNome: nomeComprador, valor }),
+        body: JSON.stringify({
+          giftId: selecionado.id,
+          compradorNome: nomeComprador,
+          valor,
+          deviceId,
+        }),
       });
+    
       const data = await res.json();
-      if (!res.ok) throw new Error(data.erro || "Erro ao iniciar pagamento");
-
+    
+      if (!res.ok) {
+        throw new Error(data.erro || "Erro ao iniciar pagamento");
+      }
+    
       window.location.href = data.initPoint;
     } catch (err) {
-      setErroModal(err.message || "Não consegui iniciar o pagamento. Tenta de novo.");
+      setErroModal(
+        err.message || "Não consegui iniciar o pagamento. Tenta de novo."
+      );
       setRedirecionando(false);
     }
   }
