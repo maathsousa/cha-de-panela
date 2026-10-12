@@ -4,7 +4,7 @@ import { criarPreferencia } from "../../../lib/mercadopago";
 import { VALOR_MINIMO_CONTRIBUICAO } from "../../../lib/config";
 
 export async function POST(request) {
-  const { giftId, compradorNome, valor } = await request.json();
+  const { giftId, compradorNome, valor, deviceId } = await request.json();
 
   if (!giftId) {
     return NextResponse.json({ erro: "Presente não informado." }, { status: 400 });
@@ -78,6 +78,7 @@ export async function POST(request) {
       valor: valorContribuicao,
       compradorNome,
       contributionId: contribution.id,
+      deviceId,
     });
 
     await supabaseAdmin
