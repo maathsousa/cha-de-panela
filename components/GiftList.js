@@ -16,16 +16,6 @@ export default function GiftList() {
   const [erroModal, setErroModal] = useState(null);
   const [pixCopiado, setPixCopiado] = useState(false);
 
-useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://www.mercadopago.com/v2/security.js";
-  script.setAttribute("view", "checkout");
-  document.body.appendChild(script);
-  return () => {
-    document.body.removeChild(script);
-  };
-}, []);
-
 async function copiarChavePix() {
   try {
     await navigator.clipboard.writeText(CHAVE_PIX);
@@ -77,6 +67,7 @@ async function copiarChavePix() {
 
   async function confirmarPagamento(e) {
     e.preventDefault();
+    const provedorPagamento = e.nativeEvent.submitter?.value || "mercadopago";
     if (!nomeComprador.trim()) {
       setErroModal("Escreve seu nome pra gente saber quem foi o presente 🙂");
       return;
@@ -105,11 +96,6 @@ async function copiarChavePix() {
     setErroModal(null);
 
     try {
-      const deviceId =
-        typeof window !== "undefined"
-          ? window.MP_DEVICE_SESSION_ID
-          : undefined;
-    
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +103,7 @@ async function copiarChavePix() {
           giftId: selecionado.id,
           compradorNome: nomeComprador,
           valor,
-          deviceId,
+          provedor: provedorPagamento,
         }),
       });
     
@@ -161,7 +147,7 @@ async function copiarChavePix() {
                   {selecionado.pagamento_unico
                     ? `Esse presente é só em pagamento único, no valor cheio de ${formatador.format(falta)}.`
                     : `Falta ${formatador.format(falta)} pra completar esse presente. Contribua com pelo menos ${formatador.format(minimo)} (ou o valor que falta, o que for menor).`}{" "}
-                  Você será levado(a) ao pagamento seguro do Mercado Pago (Pix ou cartão).
+                  Pix pelo Mercado Pago ou cartão pela InfinitePay. A confirmação do pagamento acontece automaticamente.
                 </p>
 
                 <form onSubmit={confirmarPagamento} style={{ marginTop: 16 }}>
@@ -195,14 +181,28 @@ async function copiarChavePix() {
 
                   {erroModal && <p className="mensagem-status mensagem-status--erro">{erroModal}</p>}
 
-                  <button
-                    type="submit"
-                    className="botao botao--latao"
-                    disabled={redirecionando}
-                    style={{ width: "100%", justifyContent: "center" }}
-                  >
-                    {redirecionando ? "Abrindo pagamento..." : "Ir para o pagamento"}
-                  </button>
+                  <div style={{ display: "grid", gap: 10 }}>
+                    <button
+                      type="submit"
+                      name="provedor"
+                      value="mercadopago"
+                      className="botao botao--latao"
+                      disabled={redirecionando}
+                      style={{ width: "100%", justifyContent: "center" }}
+                    >
+                      {redirecionando ? "Abrindo pagamento..." : "Pagar via Pix"}
+                    </button>
+                    <button
+                      type="submit"
+                      name="provedor"
+                      value="infinitepay"
+                      className="botao"
+                      disabled={redirecionando}
+                      style={{ width: "100%", justifyContent: "center" }}
+                    >
+                      {redirecionando ? "Abrindo pagamento..." : "Pagar com cartão"}
+                    </button>
+                  </div>
                   <button type="button" className="modal__fechar" onClick={fecharModal}>
                     Cancelar
                   </button>

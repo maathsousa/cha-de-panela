@@ -32,6 +32,9 @@ create table if not exists contributions (
   status text not null default 'pendente' check (status in ('pendente','pago','cancelado')),
   mp_payment_id text,
   mp_preference_id text,
+  payment_provider text not null default 'mercadopago' check (payment_provider in ('mercadopago','infinitepay')),
+  infinitepay_transaction_nsu text,
+  infinitepay_slug text,
   created_at timestamptz not null default now()
 );
 

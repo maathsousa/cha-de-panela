@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "../../../lib/supabase";
 import { criarPreferencia } from "../../../lib/mercadopago";
+import { criarLinkInfinitePay } from "../../../lib/infinitepay";
 import { VALOR_MINIMO_CONTRIBUICAO } from "../../../lib/config";
 
 export async function POST(request) {
-  const { giftId, compradorNome, valor, deviceId } = await request.json();
+  const { giftId, compradorNome, valor, provedor = "mercadopago" } = await request.json();
+
+  if (!["mercadopago", "infinitepay"].includes(provedor)) {
+    return NextResponse.json({ erro: "Forma de pagamento inválida." }, { status: 400 });
+  }
 
   if (!giftId) {
     return NextResponse.json({ erro: "Presente não informado." }, { status: 400 });
@@ -57,6 +62,7 @@ export async function POST(request) {
     }
   }
 
+  let contributionId;
   try {
     const { data: contribution, error: erroContribution } = await supabaseAdmin
       .from("contributions")
@@ -65,6 +71,7 @@ export async function POST(request) {
         nome: compradorNome || "Convidado",
         valor: valorContribuicao,
         status: "pendente",
+        payment_provider: provedor,
       })
       .select()
       .single();
@@ -72,13 +79,23 @@ export async function POST(request) {
     if (erroContribution || !contribution) {
       throw erroContribution || new Error("Falha ao criar contribuição.");
     }
+    contributionId = contribution.id;
+
+    if (provedor === "infinitepay") {
+      const checkoutUrl = await criarLinkInfinitePay({
+        gift,
+        valor: valorContribuicao,
+        compradorNome,
+        contributionId: contribution.id,
+      });
+      return NextResponse.json({ initPoint: checkoutUrl });
+    }
 
     const preferencia = await criarPreferencia({
       gift,
       valor: valorContribuicao,
       compradorNome,
       contributionId: contribution.id,
-      deviceId,
     });
 
     await supabaseAdmin
@@ -89,6 +106,13 @@ export async function POST(request) {
     return NextResponse.json({ initPoint: preferencia.init_point });
   } catch (err) {
     console.error(err);
+    if (contributionId) {
+      await supabaseAdmin
+        .from("contributions")
+        .update({ status: "cancelado" })
+        .eq("id", contributionId)
+        .eq("status", "pendente");
+    }
     return NextResponse.json(
       { erro: "Não consegui criar o pagamento agora. Tenta de novo em instantes." },
       { status: 500 }
