@@ -16,7 +16,7 @@ export default function GiftList() {
   const [erroModal, setErroModal] = useState(null);
   const [pixCopiado, setPixCopiado] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
   const script = document.createElement("script");
   script.src = "https://www.mercadopago.com/v2/security.js";
   script.setAttribute("view", "checkout");
